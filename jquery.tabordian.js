@@ -9,9 +9,8 @@
 
 	var pluginName = 'tabs';
 
-	function Plugin( element, options ) {
+	function Plugin(element, options) {
 	
-		//this.element = element;
 		this.$el = $(element);
 
 		this.options = $.extend({}, $.fn[pluginName].defaults, options);
@@ -61,12 +60,10 @@
 			this.attachHandler();
 			
 			if(this.options.resize) {
-			
-				var self = this;
 				
-				$(window).on('resize.' + pluginName, function() {
-					self.resizeCallback();
-				});
+				$(window).on('resize.' + pluginName, $.proxy(function() {
+					this.resizeCallback();
+				}, this));
 			}
 		},
 		
@@ -102,6 +99,9 @@
 			var self = this;
 			
 			this.$el.on('click.' + pluginName, '.tabs a', function(event) {
+				
+				console.log(this);
+				console.log(event.target);
 			
 				event.preventDefault();
 
@@ -130,8 +130,6 @@
 		 *  Shows the specified tab
 		 */
 		showTab: function(tab, instant) {
-			
-			var self = this;
 
 			if(typeof tab === 'number') {
 				tab = this.getTab(tab);
@@ -148,10 +146,11 @@
 				
 			} else if(this._isAccordion) {
 				
-				$(tab).data(pluginName + '.tab-content').slideDown(this.options.duration, function() {
+				$(tab).data(pluginName + '.tab-content').slideDown(this.options.duration, $.proxy(function() {
 					
-					self.emit('show', tab);
-				});
+					this.emit('show', tab);
+					
+				}, this));
 				
 				if(this.options.closeOtherTabs) {
 					this.hideTabs($(tab).data(pluginName + '.tab-content'));
@@ -161,10 +160,11 @@
 				
 				this.hideTabs($(tab).data(pluginName + '.tab-content'));
 				
-				$(tab).data(pluginName + '.tab-content').fadeIn(this.options.duration, function() {
+				$(tab).data(pluginName + '.tab-content').fadeIn(this.options.duration, $.proxy(function() {
 					
-					self.emit('show', tab);
-				});
+					this.emit('show', tab);
+					
+				}, this));
 			}
 			
 			$(tab).addClass(this.options.activeClass);
@@ -182,12 +182,12 @@
 			
 			// If we're in accordion mode slideUp the tab content, otherwise hide it
 			if(this._isAccordion) {
-			
-				var self = this;
 				
-				$(tab).data(pluginName + '.tab-content').slideUp(this.options.duration, function() {
-					self.emit('hide', this);
-				});
+				$(tab).data(pluginName + '.tab-content').slideUp(this.options.duration, $.proxy(function() {
+				
+					this.emit('hide', tab);
+					
+				}, this));
 				
 			} else  {
 			
@@ -227,11 +227,21 @@
 			}
 		},
 		
+		resizeCallback: function(initial) {
+			
+			if(initial) {
+				this.onResize(true);
+			} else {
+				window.clearTimeout(this.resizeTimer);
+				this.resizeTimer = window.setTimeout($.proxy(this.onResize, this, false, new Date()), this.options.resizeRefreshRate);
+			}
+		},
+		
 		/**
 		 *  Fires when the window is resized and converts the instance between tab and accordion mode
 		 */
-		resizeCallback: function(initial) {
-			
+		onResize: function(initial, date) {
+			console.log(date);
 			if(this.isDesktop()) {
 				
 				// If its not the initial call move the tab contents back in to the container
@@ -289,6 +299,7 @@
 	$.fn[pluginName].defaults = {
 		activeClass: 'tabs-active', // css class added to the active tab
 		breakPoint: 991, // The breakpoint at which accordion mode is activated. Functions must return a boolean (int|function)
+		resizeRefreshRate: 100,
 		closeOtherTabs: false, // Close other tabs when opening one in accordion mode
 		duration: 200, // Duration of transitions
 		pushState: false, // push tab events to window.history()
