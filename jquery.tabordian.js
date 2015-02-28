@@ -1,5 +1,5 @@
 /*!
-	jQuery Tabordian v1.2
+	jQuery Tabordian v1.3
 	(c) 2015 Andy Palmer
 	license: http://www.opensource.org/licenses/mit-license.php
 */
@@ -99,9 +99,6 @@
 			var self = this;
 			
 			this.$el.on('click.' + pluginName, '.tabs a', function(event) {
-				
-				console.log(this);
-				console.log(event.target);
 			
 				event.preventDefault();
 
