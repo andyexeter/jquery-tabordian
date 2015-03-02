@@ -42,8 +42,8 @@
 				$(this).data(pluginName + '.tab-content').data(pluginName + '.tab', $(this));
 			});
 			
-			// Initial call to resize callback
-			this.resizeCallback(true);
+			// Initial call to onResize
+			this.onResize(true);
 			
 			// Hide all tab contents
 			this.hideTabs();
@@ -224,21 +224,17 @@
 			}
 		},
 		
-		resizeCallback: function(initial) {
+		resizeCallback: function() {
 			
-			if(initial) {
-				this.onResize(true);
-			} else {
-				window.clearTimeout(this.resizeTimer);
-				this.resizeTimer = window.setTimeout($.proxy(this.onResize, this, false, new Date()), this.options.resizeRefreshRate);
-			}
+			window.clearTimeout(this.resizeTimer);
+			this.resizeTimer = window.setTimeout($.proxy(this.onResize, this), this.options.resizeRefreshRate);
 		},
 		
 		/**
 		 *  Fires when the window is resized and converts the instance between tab and accordion mode
 		 */
-		onResize: function(initial, date) {
-			console.log(date);
+		onResize: function(initial) {
+		
 			if(this.isDesktop()) {
 				
 				// If its not the initial call move the tab contents back in to the container
