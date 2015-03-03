@@ -1,6 +1,6 @@
 {
   "name": "jquery-tabordian",
-  "filename": "jquery.tabordian.js",
+  "basename": "jquery.tabordian",
   "version": "0.9.0",
   "private": true,
   "author": "Andy Palmer",

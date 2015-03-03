@@ -15,7 +15,7 @@ module.exports = function(grunt) {
 				jshintrc: '.jshintrc'
 			},
 			build: {
-				src: 'src/<%= pkg.filename %>',
+				src: 'src/<%= pkg.basename %>.js',
 			},
 			grunt: {
 				options: {
@@ -29,14 +29,14 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					cwd: 'src/',
-					src: ['**/*.js', 'demo.html', 'normalize.css', 'jquery.tabordian.css', '!<%= pkg.filename %>'],
+					src: ['**/*.js', 'demo.html', 'normalize.css', 'jquery.tabordian.css', '!<%= pkg.basename %>.js'],
 					dest: 'build/'
 					
 				}],
 			},
 			tests: {
-				src: 'build/<%= pkg.filename %>',
-				dest: 'tests/<%= pkg.filename %>'
+				src: 'build/<%= pkg.basename %>.js',
+				dest: 'tests/<%= pkg.basename %>.js'
 			}
 		},
         concat: {
@@ -47,8 +47,8 @@ module.exports = function(grunt) {
 						'\t(c) <%= grunt.template.today("yyyy") %> <%= pkg.author %>\n' +
 						'\tlicense: <%= pkg.license %>\n*/\n'
 				},
-				src: 'src/<%= pkg.filename %>',
-				dest: 'build/<%= pkg.filename %>'
+				src: 'src/<%= pkg.basename %>.js',
+				dest: 'build/<%= pkg.basename %>.js'
 			},
 			readme: {
 				options: {
@@ -60,9 +60,8 @@ module.exports = function(grunt) {
         },
 		uglify: {
 			build: {
-				src: 'build/<%= pkg.filename %>',
-				dest: 'build/<%= pkg.filename %>',
-				ext: '.min.js'
+				src: 'src/<%= pkg.basename %>.js',
+				dest: 'build/<%= pkg.basename %>.min.js'
 			}
 		},
 		watch: {
