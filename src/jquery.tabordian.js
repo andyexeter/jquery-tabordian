@@ -1,8 +1,3 @@
-/*!
-	jQuery Tabordian v1.3
-	(c) 2015 Andy Palmer
-	license: http://www.opensource.org/licenses/mit-license.php
-*/
 (function($, window, document, undefined) {
 
 	'use strict';
@@ -59,7 +54,7 @@
 			// Attach the click handler to tabs
 			this.attachHandler();
 			
-			if(this.options.resize) {
+			if(this.options.resizeRefreshRate !== false) {
 				
 				$(window).on('resize.' + pluginName, $.proxy(function() {
 					this.resizeCallback();
@@ -76,7 +71,7 @@
 			
 			this.tabContents.removeData(pluginName + '.tab');
 			
-			if(this.options.resize) {
+			if(this.options.resizeRefreshRate !== false) {
 				$(window).off('resize.' + pluginName);
 			}
 			
@@ -292,11 +287,10 @@
 	$.fn[pluginName].defaults = {
 		activeClass: 'tabs-active', // css class added to the active tab
 		breakPoint: 991, // The breakpoint at which accordion mode is activated. Functions must return a boolean (int|function)
-		resizeRefreshRate: 100,
 		closeOtherTabs: false, // Close other tabs when opening one in accordion mode
 		duration: 200, // Duration of transitions
 		pushState: false, // push tab events to window.history()
-		resize: true // listen for resize events
+		resizeRefreshRate: 100,
 	};
 
 })(jQuery, window, document);
