@@ -290,7 +290,7 @@
 		closeOtherTabs: false, // Close other tabs when opening one in accordion mode
 		duration: 200, // Duration of transitions
 		pushState: false, // push tab events to window.history()
-		resizeRefreshRate: 100,
+		resizeRefreshRate: 100
 	};
 
 })(jQuery, window, document);

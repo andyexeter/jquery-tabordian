@@ -29,7 +29,7 @@ module.exports = function(grunt) {
 				files: [{
 					expand: true,
 					cwd: 'src/',
-					src: ['**/*.js', 'demo.html', 'normalize.css', '!<%= pkg.filename %>'],
+					src: ['**/*.js', 'demo.html', 'normalize.css', 'jquery.tabordian.css', '!<%= pkg.filename %>'],
 					dest: 'build/'
 					
 				}],

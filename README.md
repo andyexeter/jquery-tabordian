@@ -36,20 +36,32 @@ Include the jquery.tabordian.js file and optional jquery.tabordian.css
 
 ### 3. Initialising a plugin instance
 
+The plugin can be initialised without passing any options:
+
 ```js
 $('.tabs-container').tabs();
 ```
 
+Alternatively, you can pass through an object with any of the following options to override the defaults:
+
 ### 4. Options
 
-| Option            | Data Type       | Description                                                                                                                                   | Default Value |
-|-------------------|-----------------|-----------------------------------------------------------------------------------------------------------------------------------------------|---------------|
-| activeClass       | string          | CSS class added to the active tab                                                                                                             | 'tabs-active' |
-| breakPoint        | number/function | The breakpoint in pixels at which accordion mode is activated.  Functions must return a boolean indicating if the breakpoint has been reached | 991           |
-| closeOtherTabs    | boolean         | Close other tabs when opening one in accordion mode                                                                                           | false         |
-| duration          | number          | The duration in milliseconds of tab open/close transitions                                                                                    | 200           |
-| pushState         | boolean         | Whether to push tab changes to window.history() Falls back to location.hash if the history API is unsupported                                 | false         |
-| resizeRefreshRate | number/boolean  | The rate in milliseconds to check if the breakPoint has been reached.  Set to false to ignore resize events                                     | 100           |
+| Option            | Type              | Description                                                                                                                                   | Default       |
+|-------------------|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------|---------------|
+| activeClass       | `string`          | CSS class added to the active tab                                                                                                             | 'tabs-active' |
+| breakPoint        | `number/function` | The breakpoint in pixels at which accordion mode is activated.  Functions must return a boolean indicating if the breakpoint has been reached | 991           |
+| closeOtherTabs    | `boolean`         | Close other tabs when opening one in accordion mode                                                                                           | false         |
+| duration          | `number`          | The duration in milliseconds of tab open/close transitions                                                                                    | 200           |
+| pushState         | `boolean`         | Whether to push tab changes to window.history() Falls back to location.hash if the history API is unsupported                                 | false         |
+| resizeRefreshRate | `number/boolean`  | The rate in milliseconds to check if the breakPoint has been reached.  Set to false to ignore resize events                                   | 100           |
+
+```js
+$('.tabs-container').tabs({
+	activeClass: 'my-active-tab-class',
+	duration: 500,
+	pushState: true
+});
+```
 
 License
 ------------
