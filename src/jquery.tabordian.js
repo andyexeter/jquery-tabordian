@@ -18,6 +18,12 @@
 		// Store a reference to the tab contents
 		this.tabContents = this.$el.find(this.options.contentSelector);
 
+		this.tabContents.wrapAll('<div class="' + pluginName + '-content-wrap" />');
+
+		this.container = this.tabContents.parent();
+
+		console.log(this.container);
+
 		this.init();
 	}
 
@@ -131,32 +137,26 @@
 				tab = this.getTab(0);
 			}
 
-			if(instant) {
+			var transition;
 
-				$(tab).data(pluginName + '.tab-content').show();
+			if(instant) {
+				transition = 'show';
+			} else if(this._isAccordion) {
+				transition = 'slideDown';
+			} else {
+				transition = 'fadeIn';
+			}
+
+			var duration = ( instant ) ? 0 : this.options.duration;
+
+			$(tab).data(pluginName + '.tab-content')[transition](duration, $.proxy(function() {
+
 				this.emit('show', tab);
 
-			} else if(this._isAccordion) {
+			}, this));
 
-				$(tab).data(pluginName + '.tab-content').slideDown(this.options.duration, $.proxy(function() {
-
-					this.emit('show', tab);
-
-				}, this));
-
-				if(this.options.closeOtherTabs) {
-					this.hideTabs($(tab).data(pluginName + '.tab-content'));
-				}
-
-			} else {
-
+			if(!this._isAccordion || this.options.closeOtherTabs) {
 				this.hideTabs($(tab).data(pluginName + '.tab-content'));
-
-				$(tab).data(pluginName + '.tab-content').fadeIn(this.options.duration, $.proxy(function() {
-
-					this.emit('show', tab);
-
-				}, this));
 			}
 
 			$(tab).addClass(this.options.activeClass);

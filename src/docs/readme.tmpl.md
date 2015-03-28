@@ -53,10 +53,10 @@ Alternatively, you can pass through an object with any of the following options 
 | closeOtherTabs    | `boolean`         | Close other tabs when opening one in accordion mode                                                                                           | false                     |
 | containerSelector | `string`          | Selector for the tab contents container                                                                                                       | '.tabs-content-container' |
 | contentSelector   | `string`          | Selector for the tab contents sections                                                                                                        | '.tabs-content'           |
-| duration          | `number`          | The duration in milliseconds of tab open/close transitions                                                                                    | 200                       |
+| duration          | `number`          | The duration in milliseconds of tab open/close transitions. Set to zero for instant transitions                                               | 200                       |
 | pushState         | `boolean`         | Whether to push tab changes to window.history() Falls back to location.hash if the history API is unsupported                                 | false                     |
 | resizeRefreshRate | `number/boolean`  | The rate in milliseconds to check if the breakPoint has been reached.  Set to false to ignore resize events                                   | 100                       |
-| tabsSelector      | `string`          | Selector for the actual tabs within the element                                                                                               | '.tabs a'                 |
+| tabsSelector      | 'string'          | Selector for the actual tabs within the element                                                                                               | '.tabs a'                 |
 
 ```js
 $('.tabs-container').tabs({
