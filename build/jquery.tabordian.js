@@ -153,9 +153,6 @@
 
 			var duration = ( instant ) ? 0 : this.options.duration;
 
-			console.log(tab);
-			console.log($(tab).data(pluginName + '.tab-content'));
-
 			$(tab).data(pluginName + '.tab-content')[transition](duration, $.proxy(function() {
 
 				this.emit('show', tab);
