@@ -131,7 +131,7 @@
 				tab = this.getTab(0);
 			}
 
-			if(instant) {
+			if(instant || !this.options.fadeIn) {
 
 				$(tab).data(pluginName + '.tab-content').show();
 				this.emit('show', tab);
@@ -235,6 +235,8 @@
 				// If its not the initial call move the tab contents back in to the container
 				if(!initial) {
 					this.tabContents.appendTo(this.options.containerSelector);
+
+					// @todo: Show first tab content if all tabs are hidden
 				}
 
 			} else {
@@ -291,6 +293,7 @@
 		containerSelector: '.tabs-content-container',
 		contentSelector: '.tabs-content',
 		duration: 200, // Duration of transitions
+		fadeIn: true,
 		pushState: false, // push tab events to window.history()
 		resizeRefreshRate: 100,
 		tabsSelector: '.tabs a'
