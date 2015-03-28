@@ -13,7 +13,7 @@
 		this._isAccordion = false;
 
 		// Store a reference to the tabs
-		this.tabs = this.$el.find(this.options.tabsSelector);
+		this.tabs = this.$el.find(this.options.tabSelector);
 
 		// Store a reference to the tab contents
 		this.tabContents = this.$el.find(this.options.contentSelector);
@@ -21,8 +21,6 @@
 		this.tabContents.wrapAll('<div class="' + pluginName + '-content-wrap" />');
 
 		this.container = this.tabContents.parent();
-
-		console.log(this.container);
 
 		this.init();
 	}
@@ -51,7 +49,7 @@
 
 			if(location.hash) {
 				// Pass showTab() the first matched tab only
-				this.showTab($(this.options.tabsSelector + '[href=' + location.hash + ']').eq(0), true);
+				this.showTab($(this.options.tabSelector + '[href=' + location.hash + ']').eq(0), true);
 			} else {
 				// If there is no hash fragment in the URL show the first tab
 				this.showTab(0, true);
@@ -81,7 +79,7 @@
 				$(window).off('resize.' + pluginName);
 			}
 
-			this.$el.off('click.' + pluginName, this.options.tabsSelector).removeData(pluginName + '.plugin');
+			this.$el.off('click.' + pluginName, this.options.tabSelector).removeData(pluginName + '.plugin');
 		},
 
 		/**
@@ -99,7 +97,7 @@
 
 			var self = this;
 
-			this.$el.on('click.' + pluginName, this.options.tabsSelector, function(event) {
+			this.$el.on('click.' + pluginName, this.options.tabSelector, function(event) {
 
 				event.preventDefault();
 
@@ -232,9 +230,12 @@
 
 			if(this.isDesktop()) {
 
+				console.log('hello?');
+
 				// If its not the initial call move the tab contents back in to the container
 				if(!initial) {
-					this.tabContents.appendTo(this.options.containerSelector);
+					console.log(this.container);
+					this.tabContents.appendTo(this.container);
 				}
 
 			} else {
@@ -288,12 +289,11 @@
 		activeClass: 'tabs-active', // css class added to the active tab
 		breakPoint: 991, // The breakpoint at which accordion mode is activated. Functions must return a boolean (int|function)
 		closeOtherTabs: false, // Close other tabs when opening one in accordion mode
-		containerSelector: '.tabs-content-container',
 		contentSelector: '.tabs-content',
 		duration: 200, // Duration of transitions
 		pushState: false, // push tab events to window.history()
 		resizeRefreshRate: 100,
-		tabsSelector: '.tabs a'
+		tabSelector: '.tabs a'
 	};
 
 })(jQuery, window, document);
