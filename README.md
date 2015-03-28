@@ -46,15 +46,17 @@ Alternatively, you can pass through an object with any of the following options 
 
 ### 4. Options
 
-| Option            | Type              | Description                                                                                                                                   | Default                  |
-| ----------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------ |
-| activeClass       | `string`          | CSS class added to the active tab                                                                                                             | 'tabs-active'            |
-| breakPoint        | `number/function` | The breakpoint in pixels at which accordion mode is activated.  Functions must return a boolean indicating if the breakpoint has been reached | 991                      |
-| closeOtherTabs    | `boolean`         | Close other tabs when opening one in accordion mode                                                                                           | false                    |
-| duration          | `number`          | The duration in milliseconds of tab open/close transitions                                                                                    | 200                      |
-| pushState         | `boolean`         | Whether to push tab changes to window.history() Falls back to location.hash if the history API is unsupported                                 | false                    |
-| resizeRefreshRate | `number/boolean`  | The rate in milliseconds to check if the breakPoint has been reached.  Set to false to ignore resize events                                   | 100                      |
-| contentContainer  | `string`          | CSS class for the tab contents container                                                                                                      | 'tabs-content-container' |
+| Option            | Type              | Description                                                                                                                                   | Default                   |
+| ----------------- | ----------------- | --------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------- |
+| activeClass       | `string`          | CSS class added to the active tab                                                                                                             | 'tabs-active'             |
+| breakPoint        | `number/function` | The breakpoint in pixels at which accordion mode is activated.  Functions must return a boolean indicating if the breakpoint has been reached | 991                       |
+| closeOtherTabs    | `boolean`         | Close other tabs when opening one in accordion mode                                                                                           | false                     |
+| containerSelector | `string`          | Selector for the tab contents container                                                                                                       | '.tabs-content-container' |
+| contentSelector   | `string`          | Selector for the tab contents sections                                                                                                        | '.tabs-content'           |
+| duration          | `number`          | The duration in milliseconds of tab open/close transitions                                                                                    | 200                       |
+| pushState         | `boolean`         | Whether to push tab changes to window.history() Falls back to location.hash if the history API is unsupported                                 | false                     |
+| resizeRefreshRate | `number/boolean`  | The rate in milliseconds to check if the breakPoint has been reached.  Set to false to ignore resize events                                   | 100                       |
+| tabsSelector      | `string`          | Selector for the actual tabs within the element                                                                                               | '.tabs a'                 |
 
 ```js
 $('.tabs-container').tabs({
