@@ -1,5 +1,5 @@
 /*!
-	jquery-tabordian v0.9.1
+	jquery-tabordian v0.9.3
 	A jQuery tabs/accordion plugin
 	(c) 2015 Andy Palmer
 	license: http://www.opensource.org/licenses/mit-license.php
@@ -19,10 +19,10 @@
 		this._isAccordion = false;
 
 		// Store a reference to the tabs
-		this.tabs = this.$el.find('.tabs a');
+		this.tabs = this.$el.find(this.options.tabsSelector);
 
 		// Store a reference to the tab contents
-		this.tabContents = this.$el.find('.tabs-content');
+		this.tabContents = this.$el.find(this.options.contentSelector);
 
 		this.init();
 	}
@@ -51,7 +51,7 @@
 
 			if(location.hash) {
 				// Pass showTab() the first matched tab only
-				this.showTab($('.tabs a[href=' + location.hash + ']').eq(0), true);
+				this.showTab($(this.options.tabsSelector + '[href=' + location.hash + ']').eq(0), true);
 			} else {
 				// If there is no hash fragment in the URL show the first tab
 				this.showTab(0, true);
@@ -81,7 +81,7 @@
 				$(window).off('resize.' + pluginName);
 			}
 
-			this.$el.off('click.' + pluginName, '.tabs a').removeData(pluginName + '.plugin');
+			this.$el.off('click.' + pluginName, this.options.tabsSelector).removeData(pluginName + '.plugin');
 		},
 
 		/**
@@ -99,7 +99,7 @@
 
 			var self = this;
 
-			this.$el.on('click.' + pluginName, '.tabs a', function(event) {
+			this.$el.on('click.' + pluginName, this.options.tabsSelector, function(event) {
 
 				event.preventDefault();
 
@@ -240,7 +240,7 @@
 
 				// If its not the initial call move the tab contents back in to the container
 				if(!initial) {
-					this.tabContents.appendTo('.' + this.options.contentContainer);
+					this.tabContents.appendTo(this.options.containerSelector);
 				}
 
 			} else {
@@ -294,10 +294,12 @@
 		activeClass: 'tabs-active', // css class added to the active tab
 		breakPoint: 991, // The breakpoint at which accordion mode is activated. Functions must return a boolean (int|function)
 		closeOtherTabs: false, // Close other tabs when opening one in accordion mode
+		containerSelector: '.tabs-content-container',
+		contentSelector: '.tabs-content',
 		duration: 200, // Duration of transitions
 		pushState: false, // push tab events to window.history()
 		resizeRefreshRate: 100,
-		contentContainer: 'tabs-content-container'
+		tabsSelector: '.tabs a'
 	};
 
 })(jQuery, window, document);
