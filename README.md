@@ -1,4 +1,4 @@
-# jquery-tabordian v0.9.3
+# jquery-tabordian v0.9.5
 
 jquery-tabordian is a jQuery tabs plugin which transforms into an accordion at a given breakpoint
 
