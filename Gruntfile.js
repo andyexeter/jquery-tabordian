@@ -1,11 +1,13 @@
 'use strict';
 module.exports = function(grunt) {
-	
+
+	grunt.util.linefeed = '\n';
+
 	grunt.option('stack', true);
 
     grunt.initConfig({
         pkg: grunt.file.readJSON('package.json'),
-		
+
 		// Delete contents of the build directory
 		clean: {
 			build: ['build/']
@@ -31,7 +33,7 @@ module.exports = function(grunt) {
 					cwd: 'src/',
 					src: ['**/*.js', 'demo.html', 'normalize.css', 'jquery.tabordian.css', '!<%= pkg.basename %>.js'],
 					dest: 'build/'
-					
+
 				}],
 			},
 			tests: {
@@ -73,7 +75,7 @@ module.exports = function(grunt) {
 			js: {
 				files: ['src/assets/js/*.js'],
 				tasks: ['jshint:build', 'concat', 'uglify']
-			},			
+			},
 			markup: {
 				files: ['src/*.php'],
 				tasks: ['copy:markup']
