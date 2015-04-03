@@ -202,7 +202,7 @@
 		pushState: function(state) {
 
 			if($.isFunction(history.pushState)) {
-				history.pushState({}, '', state);
+				history.replaceState({}, '', state);
 			} else {
 				location.hash = state;
 			}
