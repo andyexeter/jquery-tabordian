@@ -230,11 +230,8 @@
 
 			if(this.isDesktop()) {
 
-				console.log('hello?');
-
 				// If its not the initial call move the tab contents back in to the container
 				if(!initial) {
-					console.log(this.container);
 					this.tabContents.appendTo(this.container);
 				}
 
