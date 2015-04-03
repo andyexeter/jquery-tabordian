@@ -145,7 +145,7 @@
 				transition = 'fadeIn';
 			}
 
-			var duration = ( instant ) ? 0 : this.options.duration;
+			var duration = ( instant || transition === 'show' ) ? 0 : this.options.duration;
 
 			$(tab).data(pluginName + '.tab-content')[transition](duration, $.proxy(function() {
 
@@ -170,21 +170,12 @@
 
 			$(tab).removeClass(this.options.activeClass);
 
-			// If we're in accordion mode slideUp the tab content, otherwise hide it
-			if(this._isAccordion) {
+			var transition = ( this._isAccordion ) ? 'slideUp' : 'hide',
+				duration = ( transition === 'hide' ) ? 0 : this.options.duration;
 
-				$(tab).data(pluginName + '.tab-content').slideUp(this.options.duration, $.proxy(function() {
-
-					this.emit('hide', tab);
-
-				}, this));
-
-			} else  {
-
-				$(tab).data(pluginName + '.tab-content').hide();
-
+			$(tab).data(pluginName + '.tab-content')[transition](duration, $.proxy(function() {
 				this.emit('hide', tab);
-			}
+			}, this));
 
 			// Change Bootstrap glyphicon chevrons if they exist
 			$(tab).find('.glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
