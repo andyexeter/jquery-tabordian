@@ -1,5 +1,5 @@
 /*!
-	jquery-tabordian v0.9.5
+	jquery-tabordian v0.9.6
 	A jQuery tabs/accordion plugin
 	(c) 2015 Andy Palmer
 	license: http://www.opensource.org/licenses/mit-license.php
