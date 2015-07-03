@@ -168,6 +168,14 @@
 		 */
 		hideTab: function(tab) {
 
+			if(typeof tab === 'number') {
+				tab = this.getTab(tab);
+			}
+
+			if(!$(tab).length) {
+				tab = this.getTab(0);
+			}
+
 			$(tab).removeClass(this.options.activeClass);
 
 			var transition = ( this._isAccordion ) ? 'slideUp' : 'hide',
