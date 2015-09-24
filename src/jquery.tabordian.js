@@ -1,24 +1,24 @@
-(function($, window, document, undefined) {
+( function( $, window, document, undefined ) {
 
 	'use strict';
 
 	var pluginName = 'tabs';
 
-	function Plugin(element, options) {
+	function Plugin( element, options ) {
 
-		this.$el = $(element);
+		this.$el = $( element );
 
-		this.options = $.extend({}, $.fn[pluginName].defaults, options);
+		this.options = $.extend( { }, $.fn[pluginName].defaults, options );
 
 		this._isAccordion = false;
 
 		// Store a reference to the tabs
-		this.tabs = this.$el.find(this.options.tabSelector);
+		this.tabs = this.$el.find( this.options.tabSelector );
 
 		// Store a reference to the tab contents
-		this.tabContents = this.$el.find(this.options.contentSelector);
+		this.tabContents = this.$el.find( this.options.contentSelector );
 
-		this.tabContents.wrapAll('<div class="' + pluginName + '-content-wrap" />');
+		this.tabContents.wrapAll( '<div class="' + pluginName + '-content-wrap" />' );
 
 		this.container = this.tabContents.parent();
 
@@ -26,70 +26,66 @@
 	}
 
 	Plugin.prototype = {
-
 		/**
 		 *  Initialises the plugin instance
 		 */
 		init: function() {
 
-			this.tabs.each(function() {
+			this.tabs.each( function() {
 
 				// Give the tab a reference to its tab content div
-				$(this).data(pluginName + '.tab-content', $($(this).attr('href')));
+				$( this ).data( pluginName + '.tab-content', $( $( this ).attr( 'href' ) ) );
 
 				// Give the tab content div a reference to its tab
-				$(this).data(pluginName + '.tab-content').data(pluginName + '.tab', $(this));
-			});
+				$( this ).data( pluginName + '.tab-content' ).data( pluginName + '.tab', $( this ) );
+			} );
 
 			// Initial call to onResize
-			this.onResize(true);
+			this.onResize( true );
 
 			// Hide all tab contents
 			this.hideTabs();
 
-			if(location.hash) {
+			if ( location.hash ) {
 				// Pass showTab() the first matched tab only
-				this.showTab($(this.options.tabSelector + '[href=' + location.hash + ']').eq(0), true);
+				this.showTab( $( this.options.tabSelector + '[href=' + location.hash + ']' ).eq( 0 ), true );
 			} else {
 				// If there is no hash fragment in the URL show the first tab
-				this.showTab(0, true);
+				this.showTab( 0, true );
 			}
 
 			// Attach the click handler to tabs
 			this.attachHandler();
 
-			if(this.options.resizeRefreshRate !== false) {
+			if ( this.options.resizeRefreshRate !== false ) {
 
-				$(window).on('resize.' + pluginName, $.proxy(function() {
+				$( window ).on( 'resize.' + pluginName, $.proxy( function() {
 					this.resizeCallback();
-				}, this));
+				}, this ) );
 			}
 		},
-
 		/**
 		 *  Destroys the plugin instance
 		 */
 		destroy: function() {
 
-			this.tabs.removeData(pluginName + '.tab-content');
+			this.tabs.removeData( pluginName + '.tab-content' );
 
-			this.tabContents.removeData(pluginName + '.tab');
+			this.tabContents.removeData( pluginName + '.tab' );
 
-			if(this.options.resizeRefreshRate !== false) {
-				$(window).off('resize.' + pluginName);
+			if ( this.options.resizeRefreshRate !== false ) {
+				$( window ).off( 'resize.' + pluginName );
 			}
 
-			this.$el.off('click.' + pluginName, this.options.tabSelector).removeData(pluginName + '.plugin');
+			this.$el.off( 'click.' + pluginName, this.options.tabSelector ).removeData( pluginName + '.plugin' );
 		},
-
 		/**
 		 *  Emits a namespaced plugin event
 		 */
-		emit: function(event, tab) {
+		emit: function( event, tab ) {
 
-			this.$el.trigger(pluginName + '.' + event, [tab, this.options]);
+			this.$el.trigger( pluginName + '.' + event, [ tab, this.options ] );
 		},
-
 		/**
 		 *  Attaches the click handler to the element
 		 */
@@ -97,49 +93,64 @@
 
 			var self = this;
 
-			this.$el.on('click.' + pluginName, this.options.tabSelector, function(event) {
+			this.$el.on( 'click.' + pluginName, this.options.tabSelector, function( event ) {
 
 				event.preventDefault();
 
-				if(!$(this).data(pluginName + '.tab-content').is(':visible')) {
-					self.showTab(this);
-				} else if(self._isAccordion) {
-					self.hideTab(this);
+				if ( !$( this ).data( pluginName + '.tab-content' ).is( ':visible' ) ) {
+					self.showTab( this );
+				} else if ( self._isAccordion ) {
+					self.hideTab( this );
 				}
 
-				if(self.options.pushState) {
+				if ( self.options.pushState ) {
 
-					self.pushState($(this).attr('href'));
+					self.pushState( $( this ).attr( 'href' ) );
 				}
 
-			});
+			} );
 		},
-
 		/**
-		 *  Returns the tab at zero-based index i
+		 *  Returns the tab at a zero-based index or a matching href attribute.
 		 */
-		getTab: function(i) {
-			return this.tabs.get(i);
-		},
+		getTab: function( id ) {
 
+			var tab;
+
+			switch ( typeof id ) {
+				case 'string':
+					tab = this.tabs.filter( '[href="' + id + '"]' );
+					break;
+				case 'number':
+					tab = this.tabs.get( id );
+					break;
+				default:
+					tab = this.tabs.filter( id );
+					break;
+			}
+
+			return tab;
+		},
 		/**
 		 *  Shows the specified tab
 		 */
-		showTab: function(tab, instant) {
+		showTab: function( tab, instant ) {
 
-			if(typeof tab === 'number') {
-				tab = this.getTab(tab);
+			tab = this.getTab( tab );
+
+			if ( !$( tab ).length ) {
+				tab = this.getTab( 0 );
 			}
 
-			if(!$(tab).length) {
-				tab = this.getTab(0);
+			if ( !$( tab ).data( pluginName + '.tab-content' ) ) {
+				return false;
 			}
 
 			var transition;
 
-			if(instant) {
+			if ( instant ) {
 				transition = 'show';
-			} else if(this._isAccordion) {
+			} else if ( this._isAccordion ) {
 				transition = 'slideDown';
 			} else {
 				transition = 'fadeIn';
@@ -147,112 +158,108 @@
 
 			var duration = ( instant || transition === 'show' ) ? 0 : this.options.duration;
 
-			$(tab).data(pluginName + '.tab-content')[transition](duration, $.proxy(function() {
+			$( tab ).data( pluginName + '.tab-content' )[transition]( duration, $.proxy( function() {
 
-				this.emit('show', tab);
+				this.emit( 'show', tab );
 
-			}, this));
+			}, this ) );
 
-			if(!this._isAccordion || this.options.closeOtherTabs) {
-				this.hideTabs($(tab).data(pluginName + '.tab-content'));
+			if ( !this._isAccordion || this.options.closeOtherTabs ) {
+				this.hideTabs( $( tab ).data( pluginName + '.tab-content' ) );
 			}
 
-			$(tab).addClass(this.options.activeClass);
+			$( tab ).addClass( this.options.activeClass );
 
 			// Change glyphicon chevrons if they exist
-			$(tab).find('.glyphicon').removeClass('glyphicon-chevron-right').addClass('glyphicon-chevron-down');
+			$( tab ).find( '.glyphicon' ).removeClass( 'glyphicon-chevron-right' ).addClass( 'glyphicon-chevron-down' );
 		},
-
 		/**
 		 *  Hides a specific tab
 		 */
-		hideTab: function(tab) {
+		hideTab: function( tab ) {
 
-			if(typeof tab === 'number') {
-				tab = this.getTab(tab);
+			tab = this.getTab( tab );
+
+			if ( !$( tab ).length ) {
+				tab = this.getTab( 0 );
 			}
 
-			if(!$(tab).length) {
-				tab = this.getTab(0);
+			if ( !$( tab ).data( pluginName + '.tab-content' ) ) {
+				return false;
 			}
 
-			$(tab).removeClass(this.options.activeClass);
+			$( tab ).removeClass( this.options.activeClass );
 
 			var transition = ( this._isAccordion ) ? 'slideUp' : 'hide',
 				duration = ( transition === 'hide' ) ? 0 : this.options.duration;
 
-			$(tab).data(pluginName + '.tab-content')[transition](duration, $.proxy(function() {
-				this.emit('hide', tab);
-			}, this));
+			$( tab ).data( pluginName + '.tab-content' )[transition]( duration, $.proxy( function() {
+				this.emit( 'hide', tab );
+			}, this ) );
 
 			// Change Bootstrap glyphicon chevrons if they exist
-			$(tab).find('.glyphicon').removeClass('glyphicon-chevron-down').addClass('glyphicon-chevron-right');
+			$( tab ).find( '.glyphicon' ).removeClass( 'glyphicon-chevron-down' ).addClass( 'glyphicon-chevron-right' );
 		},
-
 		/**
 		 *  Hides all tabs apart from the current tab
 		 */
-		hideTabs: function(current) {
+		hideTabs: function( current ) {
 
-			this.tabs.removeClass(this.options.activeClass);
+			this.tabs.removeClass( this.options.activeClass );
 
-			if(this._isAccordion) {
-				this.tabContents.not(current).slideUp(this.options.duration);
+			if ( this._isAccordion ) {
+				this.tabContents.not( current ).slideUp( this.options.duration );
 			} else {
-				this.tabContents.not(current).hide();
+				this.tabContents.not( current ).hide();
 
 			}
 		},
-
 		/**
 		 *  Pushes the tab state to the history API or falls back to setting the location hash fragment
 		 */
-		pushState: function(state) {
+		pushState: function( state ) {
 
-			if($.isFunction(history.pushState)) {
-				history.replaceState({}, '', state);
+			if ( $.isFunction( history.pushState ) ) {
+				history.replaceState( { }, '', state );
 			} else {
 				location.hash = state;
 			}
 		},
-
 		resizeCallback: function() {
 
-			window.clearTimeout(this.resizeTimer);
-			this.resizeTimer = window.setTimeout($.proxy(this.onResize, this), this.options.resizeRefreshRate);
+			window.clearTimeout( this.resizeTimer );
+			this.resizeTimer = window.setTimeout( $.proxy( this.onResize, this ), this.options.resizeRefreshRate );
 		},
-
 		/**
 		 *  Fires when the window is resized and converts the instance between tab and accordion mode
 		 */
-		onResize: function(initial) {
+		onResize: function( initial ) {
 
-			if(this.isDesktop()) {
+			if ( this.isDesktop() ) {
 
 				// If its not the initial call move the tab contents back in to the container
-				if(!initial) {
-					this.tabContents.appendTo(this.container);
+				if ( !initial ) {
+					this.tabContents.appendTo( this.container );
 				}
 
 			} else {
 
-				this.tabContents.each(function() {
+				this.tabContents.each( function() {
 
-					$(this).appendTo($(this).data(pluginName + '.tab').parent());
+					$( this ).appendTo( $( this ).data( pluginName + '.tab' ).parent() );
 
-				});
+				} );
 			}
 		},
-
 		/**
 		 *  Returns whether the window width matches the breakpoint
 		 */
 		isDesktop: function() {
 
-			if($.isFunction(this.options.breakPoint)) {
-				this._isAccordion = !this.options.breakPoint.call(this);
+			if ( $.isFunction( this.options.breakPoint ) ) {
+				this._isAccordion = !this.options.breakPoint.call( this );
 			} else {
-				this._isAccordion = (window.innerWidth < this.options.breakPoint);
+				this._isAccordion = ( window.innerWidth < this.options.breakPoint );
 			}
 
 			return !this._isAccordion;
@@ -264,21 +271,21 @@
 
 		var args = arguments;
 
-		return this.each(function() {
+		return this.each( function() {
 
-			var plugin = $(this).data(pluginName + '.plugin');
+			var plugin = $( this ).data( pluginName + '.plugin' );
 
-			if (!plugin) {
+			if ( !plugin ) {
 
-				plugin = new Plugin(this, args[0]);
+				plugin = new Plugin( this, args[0] );
 
-				$(this).data(pluginName + '.plugin', plugin);
+				$( this ).data( pluginName + '.plugin', plugin );
 			}
 
-			if(typeof args[0] === 'string' && args[0].charAt(0) !== '_' && $.isFunction(plugin[args[0]])) {
-				plugin[args[0]].apply(plugin, [].slice.call(args, 1));
+			if ( typeof args[0] === 'string' && args[0].charAt( 0 ) !== '_' && $.isFunction( plugin[args[0]] ) ) {
+				plugin[args[0]].apply( plugin, [ ].slice.call( args, 1 ) );
 			}
-		});
+		} );
 	};
 
 	$.fn[pluginName].defaults = {
@@ -292,4 +299,4 @@
 		tabSelector: '.tabs a'
 	};
 
-})(jQuery, window, document);
+} )( jQuery, window, document );
