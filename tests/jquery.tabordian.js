@@ -4,6 +4,12 @@
 	(c) 2015 Andy Palmer
 	license: http://www.opensource.org/licenses/mit-license.php
 */
+/*!
+ jquery-tabordian v0.9.6
+ A jQuery tabs/accordion plugin
+ (c) 2015 Andy Palmer
+ license: http://www.opensource.org/licenses/mit-license.php
+ */
 ( function( $, window, document, undefined ) {
 
 	'use strict';
@@ -212,6 +218,7 @@
 		hideTabs: function( current ) {
 
 			this.tabs.removeClass( this.options.activeClass );
+			this.tabs.find( '.glyphicon' ).removeClass( 'glyphicon-chevron-down' ).addClass( 'glyphicon-chevron-right' );
 
 			if ( this._isAccordion ) {
 				this.tabContents.not( current ).slideUp( this.options.duration );
